@@ -1,3 +1,31 @@
+:root {
+  --cell-size: 80px;
+  --gap-size: 5px;
+  --border-radius: 5px;
+
+  /* --display-color: steelblue;
+  --digit-color: steelblue;
+  --operation-color: slategrey;
+  --command-color: rgb(115, 146, 115); */
+
+  /* --display-color: steelblue;
+  --digit-color: steelblue;
+  --operation-color: rgb(77, 129, 129);
+  --command-color: rgb(115, 146, 115); */
+
+  /* --display-color: rgb(60, 112, 156);
+  --digit-color: rgb(60, 112, 156);
+  --operation-color: rgb(77, 129, 129);
+  --command-color: rgb(167, 134, 52); */
+
+  --display-color: rgb(60, 112, 156);
+  --digit-color: rgb(60, 112, 156);
+  --operation-color: rgb(77, 129, 129);
+  --command-color: rgb(167, 145, 90);
+
+  --background-color: rgb(31, 34, 55);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -6,54 +34,57 @@
 
 body {
   min-height: 100vh;
-}
-
-.container {
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--background-color);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: repeat(5, 100px);
-  gap: 10px;
+  grid-template-columns: repeat(4, var(--cell-size));
+  grid-template-rows: repeat(6, var(--cell-size));
+  gap: var(--gap-size);
 }
 
-.display {
-  grid-area: 1 / 1 / 1 / 5;
-  background-color: darkblue;
-  border-radius: 10px;
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.cell {
+  border-radius: var(--border-radius);
+  cursor: default;
 }
 
 .button {
-  border-radius: 10px;
-
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.digit {
-  background-color: royalblue;
-}
-
-.operator {
-  background-color: orange;
+.button:hover {
+  border: 2px solid white;
 }
 
 .command {
-  background-color: red;
+  background-color: var(--command-color);
+}
+
+.digit {
+  background-color: var(--digit-color);
+}
+
+.operator {
+  background-color: var(--operation-color);
 }
 
 .label {
   color: white;
   font-family: sans-serif;
   font-size: 2rem;
+}
+
+#display {
+  grid-area: 1 / 1 / 1 / 5;
+  background-color: var(--display-color);
+
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }

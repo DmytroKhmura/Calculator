@@ -9,65 +9,75 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="grid" id="calculator">
-      <!-- Row 1 -->
-      <div class="display" id="display">
-        <div class="label">3.1415*(1+2)</div>
-      </div>
-      <!-- Row 2 -->
-      <!-- Row 3 -->
-      <div class="button digit" id="digit-7">
-        <div class="label">7</div>
-      </div>
-      <div class="button digit" id="digit-8">
-        <div class="label">8</div>
-      </div>
-      <div class="button digit" id="digit-9">
-        <div class="label">9</div>
-      </div>
-      <div class="button operator" id="op-divide">
-        <div class="label">div</div>
-      </div>
-      <!-- Row 4 -->
-      <div class="button digit" id="digit-4">
-        <div class="label">4</div>
-      </div>
-      <div class="button digit" id="digit-5">
-        <div class="label">5</div>
-      </div>
-      <div class="button digit" id="digit-6">
-        <div class="label">6</div>
-      </div>
-      <div class="button operator" id="op-multiply">
-        <div class="label">mul</div>
-      </div>
-      <!-- Row 5 -->
-      <div class="button digit" id="digit1">
-        <div class="label">1</div>
-      </div>
-      <div class="button digit" id="digit2">
-        <div class="label">2</div>
-      </div>
-      <div class="button digit" id="digit3">
-        <div class="label">3</div>
-      </div>
-      <div class="button operator" id="op-subtract">
-        <div class="label">sub</div>
-      </div>
-      <!-- Row 6 -->
-      <div class="button digit" id="digit0">
-        <div class="label">0</div>
-      </div>
-      <div class="button digit" id="decimal-point">
-        <div class="label">.</div>
-      </div>
-      <div class="button command" id="cmd-calculate">
-        <div class="label">=</div>
-      </div>
-      <div class="button operator" id="op-add">
-        <div class="label">add</div>
-      </div>
+  <div class="grid" id="calculator">
+    <!-- Row 1 -->
+    <div class="cell" id="display">
+      <div class="label">3.1415*(1+2)</div>
+    </div>
+    <!-- Row 2 -->
+    <div class="cell button command" id="cmd-clear-entry">
+      <div class="label">CE</div>
+    </div>
+    <div class="cell button operator" id="op-left-bracket">
+      <div class="label">(</div>
+    </div>
+    <div class="cell button operator" id="op-right-bracket">
+      <div class="label">)</div>
+    </div>
+    <div class="cell button operator" id="op-power">
+      <div class="label">x<sup>y</sup></div>
+    </div>
+    <!-- Row 3 -->
+    <div class="cell button digit" id="digit-7">
+      <div class="label">7</div>
+    </div>
+    <div class="cell button digit" id="digit-8">
+      <div class="label">8</div>
+    </div>
+    <div class="cell button digit" id="digit-9">
+      <div class="label">9</div>
+    </div>
+    <div class="cell button operator" id="op-division">
+      <div class="label">÷</div>
+    </div>
+    <!-- Row 4 -->
+    <div class="cell button digit" id="digit-4">
+      <div class="label">4</div>
+    </div>
+    <div class="cell button digit" id="digit-5">
+      <div class="label">5</div>
+    </div>
+    <div class="cell button digit" id="digit-6">
+      <div class="label">6</div>
+    </div>
+    <div class="cell button operator" id="op-multiplication">
+      <div class="label">×</div>
+    </div>
+    <!-- Row 5 -->
+    <div class="cell button digit" id="digit1">
+      <div class="label">1</div>
+    </div>
+    <div class="cell button digit" id="digit2">
+      <div class="label">2</div>
+    </div>
+    <div class="cell button digit" id="digit3">
+      <div class="label">3</div>
+    </div>
+    <div class="cell button operator" id="op-subtraction">
+      <div class="label">−</div>
+    </div>
+    <!-- Row 6 -->
+    <div class="cell button digit" id="digit0">
+      <div class="label">0</div>
+    </div>
+    <div class="cell button digit" id="decimal-point">
+      <div class="label">.</div>
+    </div>
+    <div class="cell button command" id="cmd-calculate">
+      <div class="label">=</div>
+    </div>
+    <div class="cell button operator" id="op-addition">
+      <div class="label">+</div>
     </div>
   </div>
   <script src="script.js"></script>
