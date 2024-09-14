@@ -3,21 +3,6 @@
   --gap-size: 5px;
   --border-radius: 5px;
 
-  /* --display-color: steelblue;
-  --digit-color: steelblue;
-  --operation-color: slategrey;
-  --command-color: rgb(115, 146, 115); */
-
-  /* --display-color: steelblue;
-  --digit-color: steelblue;
-  --operation-color: rgb(77, 129, 129);
-  --command-color: rgb(115, 146, 115); */
-
-  /* --display-color: rgb(60, 112, 156);
-  --digit-color: rgb(60, 112, 156);
-  --operation-color: rgb(77, 129, 129);
-  --command-color: rgb(167, 134, 52); */
-
   --display-color: rgb(60, 112, 156);
   --digit-color: rgb(60, 112, 156);
   --operation-color: rgb(77, 129, 129);
@@ -47,15 +32,17 @@ body {
   gap: var(--gap-size);
 }
 
-.cell {
-  border-radius: var(--border-radius);
-  cursor: default;
-}
-
-.button {
+.grid-item {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border-radius: var(--border-radius);
+  cursor: default;
+
+  color: white;
+  font-family: sans-serif;
+  font-size: 2rem;
 }
 
 .button:hover {
@@ -72,12 +59,6 @@ body {
 
 .operator {
   background-color: var(--operation-color);
-}
-
-.label {
-  color: white;
-  font-family: sans-serif;
-  font-size: 2rem;
 }
 
 #display {
