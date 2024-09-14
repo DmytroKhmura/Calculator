@@ -5,7 +5,7 @@ class Display {
 
   constructor(id) {
     this.#id = id;
-    this.#domElement = document.getElementById(this.#id);
+    this.#domElement = document.getElementById(id);
     this.#symbolBuffer = [];
   }
 
@@ -15,15 +15,15 @@ class Display {
 
   outputSymbol(symbol) {
     this.#symbolBuffer.push(symbol);
-    this.displaySymbols();
+    this.#displaySymbols();
   }
 
   removeLastSymbol() {
     this.#symbolBuffer.pop();
-    this.displaySymbols();
+    this.#displaySymbols();
   }
 
-  displaySymbols() {
+  #displaySymbols() {
     this.#domElement.textContent = this.#symbolBuffer.join("");
   }
 }
@@ -64,4 +64,26 @@ const inputButtons = [
   new InputButton("op-subtraction", "-"),
   new InputButton("op-addition", "+"),
   new InputButton("op-power", "^"),
+];
+
+class CommandButton {
+  #id;
+
+  constructor(id, callback) {
+    this.#id = id;
+    document.getElementById(id).addEventListener("click", callback);
+  }
+
+  get id() {
+    return this.#id;
+  }
+}
+
+const commandButtons = [
+  new CommandButton("cmd-clear-entry", () => {
+    display.removeLastSymbol();
+  }),
+  new CommandButton("cmd-calculate", () => {
+    alert("Calculation in progress...");
+  }),
 ];
