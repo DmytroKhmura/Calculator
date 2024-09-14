@@ -45,6 +45,10 @@ body {
   font-size: 2rem;
 }
 
+.button {
+  user-select: none;
+}
+
 .button:hover {
   border: 2px solid white;
 }
