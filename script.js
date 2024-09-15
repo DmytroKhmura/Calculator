@@ -1,9 +1,25 @@
+// Check //////////////////////////////////////////////////////////////////////
+class Check {
+  static checkId(id) {
+    if (typeof id !== "string") throw new TypeError("Invalid <id> type.");
+    if (id.length === 0) throw new RangeError("Invalid <id> value.");
+  }
+
+  static checkSymbol(symbol) {
+    if (typeof symbol !== "string")
+      throw new TypeError("Invalid <symbol> type.");
+    if (symbol.length !== 1) throw new RangeError("Invalid <symbol> value.");
+  }
+}
+
+// Display ////////////////////////////////////////////////////////////////////
 class Display {
   #id;
   #domElement;
   #symbolBuffer;
 
   constructor(id) {
+    Check.checkId(id);
     this.#id = id;
     this.#domElement = document.getElementById(id);
     this.#symbolBuffer = [];
@@ -14,6 +30,7 @@ class Display {
   }
 
   outputSymbol(symbol) {
+    Check.checkSymbol(symbol);
     this.#symbolBuffer.push(symbol);
     this.#displaySymbols();
   }
@@ -30,10 +47,14 @@ class Display {
 
 const display = new Display("display");
 
+// InputButton ////////////////////////////////////////////////////////////////
 class InputButton {
   #id;
 
   constructor(id, symbol) {
+    Check.checkId(id);
+    Check.checkSymbol(symbol);
+
     this.#id = id;
     document.getElementById(id).addEventListener("click", () => {
       display.outputSymbol(symbol);
@@ -66,10 +87,12 @@ const inputButtons = [
   new InputButton("op-power", "^"),
 ];
 
+// CommandButton //////////////////////////////////////////////////////////////
 class CommandButton {
   #id;
 
   constructor(id, callback) {
+    Check.checkId(id);
     this.#id = id;
     document.getElementById(id).addEventListener("click", callback);
   }
