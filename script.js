@@ -40,6 +40,13 @@ class Display {
     this.#displaySymbols();
   }
 
+  clear() {
+    while (this.#symbolBuffer.length > 0) {
+      this.#symbolBuffer.pop();
+    }
+    this.#displaySymbols();
+  }
+
   #displaySymbols() {
     this.#domElement.textContent = this.#symbolBuffer.join("");
   }
@@ -78,8 +85,7 @@ const inputButtons = [
   new InputButton("digit-8", "8"),
   new InputButton("digit-9", "9"),
   new InputButton("decimal-point", "."),
-  new InputButton("op-left-bracket", "("),
-  new InputButton("op-right-bracket", ")"),
+  new InputButton("sign", "±"),
   new InputButton("op-division", "/"),
   new InputButton("op-multiplication", "*"),
   new InputButton("op-subtraction", "-"),
@@ -105,6 +111,9 @@ class CommandButton {
 const commandButtons = [
   new CommandButton("cmd-clear-entry", () => {
     display.removeLastSymbol();
+  }),
+  new CommandButton("cmd-clear", () => {
+    display.clear();
   }),
   new CommandButton("cmd-calculate", () => {
     alert("Calculation in progress...");
