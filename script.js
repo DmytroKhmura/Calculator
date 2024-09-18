@@ -1,29 +1,69 @@
+"use strict";
+
 // Symbols ////////////////////////////////////////////////////////////////////
-const SMB_NUM_DIGIT_0 = "0";
-const SMB_NUM_DIGIT_1 = "1";
-const SMB_NUM_DIGIT_2 = "2";
-const SMB_NUM_DIGIT_3 = "3";
-const SMB_NUM_DIGIT_4 = "4";
-const SMB_NUM_DIGIT_5 = "5";
-const SMB_NUM_DIGIT_6 = "6";
-const SMB_NUM_DIGIT_7 = "7";
-const SMB_NUM_DIGIT_8 = "8";
-const SMB_NUM_DIGIT_9 = "9";
-const SMB_NUM_DECIMAL_POINT = ".";
-const SMB_NUM_SIGN = "s";
-const SMB_OP_ADDITION = "+";
-const SMB_OP_SUTRACTION = "-";
-const SMB_OP_MULTIPLICATION = "*";
-const SMB_OP_DIVISION = "/";
-const SMB_OP_POWER = "^";
-const SMB_CMD_CLEAR = "c";
-const SMB_CMD_CLEAR_ENTRY = "x";
-const SMB_CMD_CALCULATE = " ";
+class Symbol {
+  static #count = 0;
+
+  #id;
+  #char;
+
+  static get() {
+    return Symbol.#count;
+  }
+
+  constructor(char) {
+    this.#id = Symbol.#count++;
+    this.#char = char;
+  }
+
+  get id() {
+    return this.#id;
+  }
+
+  get character() {
+    return this.#char;
+  }
+}
+
+// TODO make symbol an object containing folowing properties:
+// * id - numerical identifier
+// * character - displayed character
+// * key - assosiated keyboard key
+// * operandCount - number of operands for operators
+const SMB_NUM_DIGIT_0 = new Symbol("0");
+const SMB_NUM_DIGIT_1 = new Symbol("1");
+const SMB_NUM_DIGIT_2 = new Symbol("2");
+const SMB_NUM_DIGIT_3 = new Symbol("3");
+const SMB_NUM_DIGIT_4 = new Symbol("4");
+const SMB_NUM_DIGIT_5 = new Symbol("5");
+const SMB_NUM_DIGIT_6 = new Symbol("6");
+const SMB_NUM_DIGIT_7 = new Symbol("7");
+const SMB_NUM_DIGIT_8 = new Symbol("8");
+const SMB_NUM_DIGIT_9 = new Symbol("9");
+const SMB_NUM_DECIMAL_POINT = new Symbol(".");
+const SMB_NUM_SIGN = new Symbol("s");
+const SMB_OP_ADDITION = new Symbol("+");
+const SMB_OP_SUTRACTION = new Symbol("-");
+const SMB_OP_MULTIPLICATION = new Symbol("*");
+const SMB_OP_DIVISION = new Symbol("/");
+const SMB_OP_POWER = new Symbol("^");
+const SMB_CMD_CLEAR = new Symbol("c");
+const SMB_CMD_CLEAR_ENTRY = new Symbol("x");
+const SMB_CMD_CALCULATE = new Symbol(" ");
 
 // NumberController ///////////////////////////////////////////////////////////
 const MAX_NUM_INTEGER_PART_SIZE = 6;
 const MAX_NUM_DECIMAL_PART_SIZE = 3;
 
+// TODO implement following NumberController functionality:
+// * init state -> 0;
+// * 0 -> putSymbol(0) -> 0
+// * 0 -> putSymbol(8) -> 8
+// * putting 0 as last digit in decimal part is ignored;
+// * implement normalization (-0 -> 0, 0.00 -> 0, etc)
+// * -1 -> putSymbol(<clear entry>) -> -0
+// * -0 -> putSymbol(<clear entry>) -> 0
+// * implement setting using number
 class NumberController {
   #isMinusSignSet;
   #isDecimalPointSet;
