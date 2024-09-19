@@ -1,69 +1,49 @@
 "use strict";
 
-// Symbols ////////////////////////////////////////////////////////////////////
-class Symbol {
-  static #count = 0;
+const STR_DIGIT_0 = "0";
+const STR_DIGIT_1 = "1";
+const STR_DIGIT_2 = "2";
+const STR_DIGIT_3 = "3";
+const STR_DIGIT_4 = "4";
+const STR_DIGIT_5 = "5";
+const STR_DIGIT_6 = "6";
+const STR_DIGIT_7 = "7";
+const STR_DIGIT_8 = "8";
+const STR_DIGIT_9 = "9";
+const STR_DECIMAL_POINT = ".";
+const STR_MINUS_SIGN = "-";
+const STR_ADDITION = "+";
+const STR_SUBTRACTION = "−";
+const STR_MULTIPLICATION = "×";
+const STR_DIVISION = "÷";
+const STR_POWER = "<span>x<sup>y</sup></span>";
 
-  #id;
-  #char;
-
-  static get() {
-    return Symbol.#count;
-  }
-
-  constructor(char) {
-    this.#id = Symbol.#count++;
-    this.#char = char;
-  }
-
-  get id() {
-    return this.#id;
-  }
-
-  get character() {
-    return this.#char;
-  }
-}
-
-// TODO make symbol an object containing folowing properties:
-// * id - numerical identifier
-// * character - displayed character
-// * key - assosiated keyboard key
-// * operandCount - number of operands for operators
-const SMB_NUM_DIGIT_0 = new Symbol("0");
-const SMB_NUM_DIGIT_1 = new Symbol("1");
-const SMB_NUM_DIGIT_2 = new Symbol("2");
-const SMB_NUM_DIGIT_3 = new Symbol("3");
-const SMB_NUM_DIGIT_4 = new Symbol("4");
-const SMB_NUM_DIGIT_5 = new Symbol("5");
-const SMB_NUM_DIGIT_6 = new Symbol("6");
-const SMB_NUM_DIGIT_7 = new Symbol("7");
-const SMB_NUM_DIGIT_8 = new Symbol("8");
-const SMB_NUM_DIGIT_9 = new Symbol("9");
-const SMB_NUM_DECIMAL_POINT = new Symbol(".");
-const SMB_NUM_SIGN = new Symbol("s");
-const SMB_OP_ADDITION = new Symbol("+");
-const SMB_OP_SUTRACTION = new Symbol("-");
-const SMB_OP_MULTIPLICATION = new Symbol("*");
-const SMB_OP_DIVISION = new Symbol("/");
-const SMB_OP_POWER = new Symbol("^");
-const SMB_CMD_CLEAR = new Symbol("c");
-const SMB_CMD_CLEAR_ENTRY = new Symbol("x");
-const SMB_CMD_CALCULATE = new Symbol(" ");
+// ButtonCode /////////////////////////////////////////////////////////////////
+const BTN_CODE_NUM_DIGIT_0 = 0;
+const BTN_CODE_NUM_DIGIT_1 = 1;
+const BTN_CODE_NUM_DIGIT_2 = 2;
+const BTN_CODE_NUM_DIGIT_3 = 3;
+const BTN_CODE_NUM_DIGIT_4 = 4;
+const BTN_CODE_NUM_DIGIT_5 = 5;
+const BTN_CODE_NUM_DIGIT_6 = 6;
+const BTN_CODE_NUM_DIGIT_7 = 7;
+const BTN_CODE_NUM_DIGIT_8 = 8;
+const BTN_CODE_NUM_DIGIT_9 = 9;
+const BTN_CODE_NUM_DECIMAL_POINT = 10;
+const BTN_CODE_NUM_SIGN = 11;
+const BTN_CODE_OP_ADDITION = 100;
+const BTN_CODE_OP_SUBTRACTION = 101;
+const BTN_CODE_OP_MULTIPLICATION = 102;
+const BTN_CODE_OP_DIVISION = 103;
+const BTN_CODE_OP_POWER = 104;
+const BTN_CODE_CMD_CALCULATE = 200;
+const BTN_CODE_CMD_CLEAR = 201;
+const BTN_CODE_CMD_CLEAR_ENTRY = 202;
 
 // NumberController ///////////////////////////////////////////////////////////
 const MAX_NUM_INTEGER_PART_SIZE = 6;
 const MAX_NUM_DECIMAL_PART_SIZE = 3;
 
-// TODO implement following NumberController functionality:
-// * init state -> 0;
-// * 0 -> putSymbol(0) -> 0
-// * 0 -> putSymbol(8) -> 8
-// * putting 0 as last digit in decimal part is ignored;
-// * implement normalization (-0 -> 0, 0.00 -> 0, etc)
-// * -1 -> putSymbol(<clear entry>) -> -0
-// * -0 -> putSymbol(<clear entry>) -> 0
-// * implement setting using number
 class NumberController {
   #isMinusSignSet;
   #isDecimalPointSet;
@@ -93,48 +73,84 @@ class NumberController {
     );
   }
 
+  normalize() {
+    for (let i = this.#decimalPart.length - 1; i >= 0; --i) {
+      if (this.#decimalPart[i] === STR_DIGIT_0) {
+        this.#decimalPart.pop();
+      }
+    }
+    if (this.#decimalPart.length === 0) {
+      this.#isDecimalPointSet = false;
+    }
+    if (this.#integerPart.length === 0 && this.#decimalPart.length === 0) {
+      this.#isMinusSignSet = false;
+    }
+  }
+
   getString() {
-    const sign = this.#isMinusSignSet ? "-" : "";
-    const decimalPoint = this.#isDecimalPointSet ? "." : "";
-    const integerPart = this.#integerPart.join("");
+    const sign = this.#isMinusSignSet ? STR_MINUS_SIGN : "";
+    const decimalPoint = this.#isDecimalPointSet ? STR_DECIMAL_POINT : "";
+    let integerPart = this.#integerPart.join("");
+    if (integerPart === "") {
+      integerPart = STR_DIGIT_0;
+    }
     const decimalPart = this.#decimalPart.join("");
     return `${sign}${integerPart}${decimalPoint}${decimalPart}`;
   }
 
-  putSymbol(symbol) {
-    switch (symbol) {
-      case SMB_NUM_DIGIT_0:
-      case SMB_NUM_DIGIT_1:
-      case SMB_NUM_DIGIT_2:
-      case SMB_NUM_DIGIT_3:
-      case SMB_NUM_DIGIT_4:
-      case SMB_NUM_DIGIT_5:
-      case SMB_NUM_DIGIT_6:
-      case SMB_NUM_DIGIT_7:
-      case SMB_NUM_DIGIT_8:
-      case SMB_NUM_DIGIT_9: {
-        if (!this.#isDecimalPointSet) {
-          if (this.#integerPart.length < MAX_NUM_INTEGER_PART_SIZE) {
-            this.#integerPart.push(symbol);
-          }
-        } else {
-          if (this.#decimalPart.length < MAX_NUM_DECIMAL_PART_SIZE) {
-            this.#decimalPart.push(symbol);
-          }
-        }
+  processButtonClick(btnCode) {
+    switch (btnCode) {
+      case BTN_CODE_NUM_DIGIT_0: {
+        this.#pushDigit(STR_DIGIT_0);
         break;
       }
-      case SMB_NUM_DECIMAL_POINT: {
+      case BTN_CODE_NUM_DIGIT_1: {
+        this.#pushDigit(STR_DIGIT_1);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_2: {
+        this.#pushDigit(STR_DIGIT_2);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_3: {
+        this.#pushDigit(STR_DIGIT_3);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_4: {
+        this.#pushDigit(STR_DIGIT_4);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_5: {
+        this.#pushDigit(STR_DIGIT_5);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_6: {
+        this.#pushDigit(STR_DIGIT_6);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_7: {
+        this.#pushDigit(STR_DIGIT_7);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_8: {
+        this.#pushDigit(STR_DIGIT_8);
+        break;
+      }
+      case BTN_CODE_NUM_DIGIT_9: {
+        this.#pushDigit(STR_DIGIT_9);
+        break;
+      }
+      case BTN_CODE_NUM_DECIMAL_POINT: {
         if (!this.#isDecimalPointSet) {
           this.#isDecimalPointSet = true;
         }
         break;
       }
-      case SMB_NUM_SIGN: {
+      case BTN_CODE_NUM_SIGN: {
         this.#isMinusSignSet = !this.#isMinusSignSet;
         break;
       }
-      case SMB_CMD_CLEAR_ENTRY: {
+      case BTN_CODE_CMD_CLEAR_ENTRY: {
         if (this.#decimalPart.length > 0) {
           this.#decimalPart.pop();
         } else if (this.#isDecimalPointSet) {
@@ -148,90 +164,107 @@ class NumberController {
       }
     }
   }
+
+  #pushDigit(digitStr) {
+    if (!this.#isDecimalPointSet) {
+      if (this.#integerPart.length === 0 && digitStr === STR_DIGIT_0) {
+        return;
+      }
+      if (this.#integerPart.length < MAX_NUM_INTEGER_PART_SIZE) {
+        this.#integerPart.push(digitStr);
+      }
+    } else {
+      if (this.#decimalPart.length < MAX_NUM_DECIMAL_PART_SIZE) {
+        this.#decimalPart.push(digitStr);
+      }
+    }
+  }
 }
 
 // MainController /////////////////////////////////////////////////////////////
-class MainController {
-  #operator;
-  #leftOperand;
-  #rightOperand;
+// class MainController {
+//   #operator;
+//   #leftOperand;
+//   #rightOperand;
 
-  constructor() {
-    this.#operator = undefined;
-    this.#leftOperand = new NumberController();
-    this.#rightOperand = new NumberController();
-  }
+//   constructor() {
+//     this.#operator = undefined;
+//     this.#leftOperand = new NumberController();
+//     this.#rightOperand = new NumberController();
+//   }
 
-  clear() {
-    this.#operator = undefined;
-    this.#leftOperand.clear();
-    this.#rightOperand.clear();
-  }
+//   clear() {
+//     this.#operator = undefined;
+//     this.#leftOperand.clear();
+//     this.#rightOperand.clear();
+//   }
 
-  putSymbol(symbol) {
-    switch (symbol) {
-      case SMB_OP_ADDITION:
-      case SMB_OP_SUTRACTION:
-      case SMB_OP_MULTIPLICATION:
-      case SMB_OP_SUTRACTION:
-      case SMB_OP_POWER: {
-        this.#operator = symbol;
-        break;
-      }
-      case SMB_CMD_CLEAR: {
-        this.clear();
-        break;
-      }
-      case SMB_CMD_CLEAR_ENTRY: {
-        this.#rightOperand.putSymbol(symbol);
-        break;
-      }
-      case SMB_CMD_CALCULATE: {
-        break;
-      }
-      default: {
-        this.#rightOperand.putSymbol(symbol);
-        break;
-      }
-    }
-    document.getElementById("display").textContent =
-      this.#rightOperand.getString();
-  }
-}
+//   processButtonClick(code) {
+//     switch (code) {
+//       case BTN_CODE_OP_ADDITION:
+//       case BTN_CODE_OP_SUBTRACTION:
+//       case BTN_CODE_OP_MULTIPLICATION:
+//       case BTN_CODE_OP_SUBTRACTION:
+//       case BTN_CODE_OP_POWER: {
+//         this.#operator = symbol;
+//         break;
+//       }
+//       case BTN_CODE_CMD_CLEAR: {
+//         this.clear();
+//         break;
+//       }
+//       case BTN_CODE_CMD_CLEAR_ENTRY: {
+//         this.#rightOperand.putSymbol(symbol);
+//         break;
+//       }
+//       case BTN_CODE_CMD_CALCULATE: {
+//         break;
+//       }
+//       default: {
+//         this.#rightOperand.putSymbol(symbol);
+//         break;
+//       }
+//     }
+//     document.getElementById("display").textContent =
+//       this.#rightOperand.getString();
+//   }
+// }
 
 // Main ///////////////////////////////////////////////////////////////////////
 const dataArr = [
-  ["num-digit-0", SMB_NUM_DIGIT_0],
-  ["num-digit-1", SMB_NUM_DIGIT_1],
-  ["num-digit-2", SMB_NUM_DIGIT_2],
-  ["num-digit-3", SMB_NUM_DIGIT_3],
-  ["num-digit-4", SMB_NUM_DIGIT_4],
-  ["num-digit-5", SMB_NUM_DIGIT_5],
-  ["num-digit-6", SMB_NUM_DIGIT_6],
-  ["num-digit-7", SMB_NUM_DIGIT_7],
-  ["num-digit-8", SMB_NUM_DIGIT_8],
-  ["num-digit-9", SMB_NUM_DIGIT_9],
-  ["num-decimal-point", SMB_NUM_DECIMAL_POINT],
-  ["num-sign", SMB_NUM_SIGN],
-  ["op-addition", SMB_OP_ADDITION],
-  ["op-subtraction", SMB_OP_SUTRACTION],
-  ["op-multiplication", SMB_OP_MULTIPLICATION],
-  ["op-division", SMB_OP_DIVISION],
-  ["op-power", SMB_OP_POWER],
-  ["cmd-clear", SMB_CMD_CLEAR],
-  ["cmd-clear-entry", SMB_CMD_CLEAR_ENTRY],
-  ["cmd-calculate", SMB_CMD_CALCULATE],
+  ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
+  ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
+  ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
+  ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
+  ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
+  ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
+  ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
+  ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
+  ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
+  ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
+  ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
+  ["btn-num-sign", BTN_CODE_NUM_SIGN],
+  ["btn-op-addition", BTN_CODE_OP_ADDITION],
+  ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
+  ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
+  ["btn-op-division", BTN_CODE_OP_DIVISION],
+  ["btn-op-power", BTN_CODE_OP_POWER],
+  ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
+  ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
+  ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
 ];
 
 const main = () => {
-  const controller = new MainController();
+  const numCtrl = new NumberController();
   for (const data of dataArr) {
-    const [id, symbol] = data;
+    const [id, btnCode] = data;
     if (!document.getElementById(id)) {
       console.log("False id");
     }
     document.getElementById(id).addEventListener("click", () => {
-      controller.putSymbol(symbol);
+      numCtrl.processButtonClick(btnCode);
+      document.getElementById("disp-right-operand").textContent =
+        numCtrl.getString();
     });
   }
 };
