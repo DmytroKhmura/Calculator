@@ -9,37 +9,40 @@
 </head>
 
 <body>
-  <div class="grid" id="calculator">
+  <div id="calculator">
     <!-- Row 1 -->
-    <div class="grid-item" id="display"></div>
+    <div class="calculator-item" id="display">
+      <div class="display-item" id="disp-operator">*</div>
+      <div class="display-item" id="disp-left-operand">3.1415</div>
+      <div class="display-item" id="disp-right-operand">2</div>
+    </div>
     <!-- Row 2 -->
-    <div class="grid-item button command" id="cmd-clear">C</div>
-    <div class="grid-item button command" id="cmd-clear-entry">CE</div>
-    <div class="grid-item button operator" id="op-power">
+    <div class="calculator-item button command" id="btn-cmd-clear">C</div>
+    <div class="calculator-item button command" id="btn-cmd-clear-entry">CE</div>
+    <div class="calculator-item button operator" id="btn-op-power">
       <span>x<sup>y</sup></span>
     </div>
-    <div class="grid-item button operator" id="op-division">÷</div>
+    <div class="calculator-item button operator" id="btn-op-division">÷</div>
     <!-- Row 3 -->
-    <div class="grid-item button digit" id="num-digit-7">7</div>
-    <div class="grid-item button digit" id="num-digit-8">8</div>
-    <div class="grid-item button digit" id="num-digit-9">9</div>
-    <div class="grid-item button operator" id="op-multiplication">×</div>
+    <div class="calculator-item button digit" id="btn-num-digit-7">7</div>
+    <div class="calculator-item button digit" id="btn-num-digit-8">8</div>
+    <div class="calculator-item button digit" id="btn-num-digit-9">9</div>
+    <div class="calculator-item button operator" id="btn-op-multiplication">×</div>
     <!-- Row 4 -->
-    <div class="grid-item button digit" id="num-digit-4">4</div>
-    <div class="grid-item button digit" id="num-digit-5">5</div>
-    <div class="grid-item button digit" id="num-digit-6">6</div>
-    <div class="grid-item button operator" id="op-subtraction">−</div>
+    <div class="calculator-item button digit" id="btn-num-digit-4">4</div>
+    <div class="calculator-item button digit" id="btn-num-digit-5">5</div>
+    <div class="calculator-item button digit" id="btn-num-digit-6">6</div>
+    <div class="calculator-item button operator" id="btn-op-subtraction">−</div>
     <!-- Row 5 -->
-    <div class="grid-item button digit" id="num-digit-1">1</div>
-    <div class="grid-item button digit" id="num-digit-2">2</div>
-    <div class="grid-item button digit" id="num-digit-3">3</div>
-    <div class="grid-item button operator" id="op-addition">+</div>
+    <div class="calculator-item button digit" id="btn-num-digit-1">1</div>
+    <div class="calculator-item button digit" id="btn-num-digit-2">2</div>
+    <div class="calculator-item button digit" id="btn-num-digit-3">3</div>
+    <div class="calculator-item button operator" id="btn-op-addition">+</div>
     <!-- Row 6 -->
-    <div class="grid-item button digit" id="num-sign">±</div>
-    <div class="grid-item button digit" id="num-digit-0">0</div>
-    <div class="grid-item button digit" id="num-decimal-point">.</div>
-    <div class="grid-item button command" id="cmd-calculate">=</div>
-
+    <div class="calculator-item button digit" id="btn-num-sign">±</div>
+    <div class="calculator-item button digit" id="btn-num-digit-0">0</div>
+    <div class="calculator-item button digit" id="btn-num-decimal-point">.</div>
+    <div class="calculator-item button command" id="btn-cmd-calculate">=</div>
   </div>
   <script src="script.js"></script>
 </body>

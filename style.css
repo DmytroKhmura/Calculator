@@ -1,14 +1,22 @@
 :root {
-  --cell-size: 80px;
-  --gap-size: 5px;
-  --border-radius: 5px;
+  --calc-width: 335px;
+  --calc-height: 505px;
+  --calc-gap-size: 5px;
+  --calc-item-border-radius: 5px;
 
-  --display-color: rgb(60, 112, 156);
-  --digit-color: rgb(60, 112, 156);
-  --operation-color: rgb(77, 129, 129);
-  --command-color: rgb(167, 145, 90);
+  --display-bg-color: rgb(60, 112, 156);
+  --display-text-color: white;
 
-  --background-color: rgb(31, 34, 55);
+  --btn-num-bg-color: rgb(60, 112, 156);
+  --btn-num-text-color: white;
+
+  --btn-op-bg-color: rgb(77, 129, 129);
+  --btn-op-text-color: white;
+
+  --btn-cmd-bg-color: rgb(167, 145, 90);
+  --btn-cmd-text-color: white;
+
+  --screen-bg-color: rgb(31, 34, 55);
 }
 
 * {
@@ -22,27 +30,60 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background-color);
+  background-color: var(--screen-bg-color);
 }
 
-.grid {
+#calculator {
+  width: var(--calc-width);
+  height: var(--calc-height);
   display: grid;
-  grid-template-columns: repeat(4, var(--cell-size));
-  grid-template-rows: repeat(6, var(--cell-size));
-  gap: var(--gap-size);
+  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--calc-gap-size);
 }
 
-.grid-item {
+.calculator-item {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  border-radius: var(--border-radius);
+  border-radius: var(--calc-item-border-radius);
   cursor: default;
 
-  color: white;
   font-family: sans-serif;
   font-size: 2rem;
+}
+
+#display {
+  grid-area: 1 / 1 / span 1 / span 4;
+  color: var(--display-text-color);
+  background-color: var(--display-bg-color);
+
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.display-item {
+  font-family: sans-serif;
+  font-size: 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#disp-operator {
+  grid-area: 1 / 1 / span 2 / span 1;
+  justify-content: center;
+}
+
+#disp-left-operand {
+  grid-area: 1 / 2 / span 1 / span 7;
+}
+
+#disp-right-operand {
+  grid-area: 2 / 2 / span 1 / span 7;
 }
 
 .button {
@@ -54,22 +95,16 @@ body {
 }
 
 .command {
-  background-color: var(--command-color);
+  color: var(--btn-cmd-text-color);
+  background-color: var(--btn-cmd-bg-color);
 }
 
 .digit {
-  background-color: var(--digit-color);
+  color: var(--btn-num-text-color);
+  background-color: var(--btn-num-bg-color);
 }
 
 .operator {
-  background-color: var(--operation-color);
-}
-
-#display {
-  grid-area: 1 / 1 / 1 / 5;
-  background-color: var(--display-color);
-
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  color: var(--btn-op-text-color);
+  background-color: var(--btn-op-bg-color);
 }
