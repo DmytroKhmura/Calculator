@@ -181,54 +181,131 @@ class NumberController {
   }
 }
 
-// MainController /////////////////////////////////////////////////////////////
-// class MainController {
-//   #operator;
-//   #leftOperand;
-//   #rightOperand;
+// ExpressionController ///////////////////////////////////////////////////////
+class ExpressionController {
+  #operatorStr;
+  #operation;
+  #isLeftOperandSet;
+  #leftOperand;
+  #rightOperand;
 
-//   constructor() {
-//     this.#operator = undefined;
-//     this.#leftOperand = new NumberController();
-//     this.#rightOperand = new NumberController();
-//   }
+  constructor() {
+    this.#operatorStr = "";
+    this.#operation = null;
+    this.#isLeftOperandSet = false;
+    this.#leftOperand = new NumberController();
+    this.#rightOperand = new NumberController();
+  }
 
-//   clear() {
-//     this.#operator = undefined;
-//     this.#leftOperand.clear();
-//     this.#rightOperand.clear();
-//   }
+  clear() {
+    this.#operatorStr = "";
+    this.#operation = null;
+    this.#isLeftOperandSet = false;
+    this.#leftOperand.clear();
+    this.#rightOperand.clear();
+  }
 
-//   processButtonClick(code) {
-//     switch (code) {
-//       case BTN_CODE_OP_ADDITION:
-//       case BTN_CODE_OP_SUBTRACTION:
-//       case BTN_CODE_OP_MULTIPLICATION:
-//       case BTN_CODE_OP_SUBTRACTION:
-//       case BTN_CODE_OP_POWER: {
-//         this.#operator = symbol;
-//         break;
-//       }
-//       case BTN_CODE_CMD_CLEAR: {
-//         this.clear();
-//         break;
-//       }
-//       case BTN_CODE_CMD_CLEAR_ENTRY: {
-//         this.#rightOperand.putSymbol(symbol);
-//         break;
-//       }
-//       case BTN_CODE_CMD_CALCULATE: {
-//         break;
-//       }
-//       default: {
-//         this.#rightOperand.putSymbol(symbol);
-//         break;
-//       }
-//     }
-//     document.getElementById("display").textContent =
-//       this.#rightOperand.getString();
-//   }
-// }
+  getOperatorString() {
+    return this.#operatorStr;
+  }
+
+  getLeftOperandString() {
+    return this.#isLeftOperandSet ? this.#leftOperand.getString() : "";
+  }
+
+  getRightOperandString() {
+    return this.#rightOperand.getString();
+  }
+
+  processButtonClick(btnCode) {
+    switch (btnCode) {
+      case BTN_CODE_OP_ADDITION: {
+        this.#pushOperator(STR_ADDITION, this.#addition);
+        break;
+      }
+      case BTN_CODE_OP_SUBTRACTION: {
+        this.#pushOperator(STR_SUBTRACTION, this.#subtraction);
+        break;
+      }
+      case BTN_CODE_OP_MULTIPLICATION: {
+        this.#pushOperator(STR_MULTIPLICATION, this.#multiplication);
+        break;
+      }
+      case BTN_CODE_OP_DIVISION: {
+        this.#pushOperator(STR_DIVISION, this.#division);
+        break;
+      }
+      case BTN_CODE_OP_POWER: {
+        this.#pushOperator(STR_POWER, this.#power);
+        break;
+      }
+      case BTN_CODE_CMD_CLEAR: {
+        this.clear();
+        break;
+      }
+      case BTN_CODE_CMD_CLEAR_ENTRY: {
+        if (!this.#rightOperand.isEmpty()) {
+          this.#rightOperand.processButtonClick(btnCode);
+        } else if (this.#operatorStr !== "") {
+          this.#operatorStr = "";
+          this.#operation = null;
+          this.#swapOperands();
+          this.#isLeftOperandSet = false;
+        }
+        break;
+      }
+      case BTN_CODE_CMD_CALCULATE: {
+        if (this.#isLeftOperandSet) {
+          const x = Number(this.#leftOperand.getString());
+          const y = Number(this.#rightOperand.getString());
+          const result = this.#operation(x, y);
+          console.log(this.#operatorStr, x, y, result);
+        }
+        break;
+      }
+      default: {
+        this.#rightOperand.processButtonClick(btnCode);
+        break;
+      }
+    }
+  }
+
+  #pushOperator(operatorStr, operation) {
+    if (!this.#isLeftOperandSet) {
+      this.#swapOperands();
+      this.#leftOperand.normalize();
+      this.#isLeftOperandSet = true;
+    }
+    this.#operatorStr = operatorStr;
+    this.#operation = operation;
+  }
+
+  #swapOperands() {
+    let tmp = this.#leftOperand;
+    this.#leftOperand = this.#rightOperand;
+    this.#rightOperand = tmp;
+  }
+
+  #addition(x, y) {
+    return x + y;
+  }
+
+  #subtraction(x, y) {
+    return x - y;
+  }
+
+  #multiplication(x, y) {
+    return x * y;
+  }
+
+  #division(x, y) {
+    return x / y;
+  }
+
+  #power(x, y) {
+    return Math.pow(x, y);
+  }
+}
 
 // Main ///////////////////////////////////////////////////////////////////////
 const dataArr = [
@@ -255,16 +332,20 @@ const dataArr = [
 ];
 
 const main = () => {
-  const numCtrl = new NumberController();
+  const exprCtrl = new ExpressionController();
   for (const data of dataArr) {
     const [id, btnCode] = data;
     if (!document.getElementById(id)) {
       console.log("False id");
     }
     document.getElementById(id).addEventListener("click", () => {
-      numCtrl.processButtonClick(btnCode);
+      exprCtrl.processButtonClick(btnCode);
+      document.getElementById("disp-operator").innerHTML =
+        exprCtrl.getOperatorString();
+      document.getElementById("disp-left-operand").textContent =
+        exprCtrl.getLeftOperandString();
       document.getElementById("disp-right-operand").textContent =
-        numCtrl.getString();
+        exprCtrl.getRightOperandString();
     });
   }
 };
