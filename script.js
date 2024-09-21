@@ -220,23 +220,26 @@ class ExpressionController {
   processButtonClick(btnCode) {
     switch (btnCode) {
       case BTN_CODE_OP_ADDITION: {
-        this.#pushOperator(STR_ADDITION, this.#addition);
+        this.#pushOperator(STR_ADDITION, ExpressionController.#addition);
         break;
       }
       case BTN_CODE_OP_SUBTRACTION: {
-        this.#pushOperator(STR_SUBTRACTION, this.#subtraction);
+        this.#pushOperator(STR_SUBTRACTION, ExpressionController.#subtraction);
         break;
       }
       case BTN_CODE_OP_MULTIPLICATION: {
-        this.#pushOperator(STR_MULTIPLICATION, this.#multiplication);
+        this.#pushOperator(
+          STR_MULTIPLICATION,
+          ExpressionController.#multiplication
+        );
         break;
       }
       case BTN_CODE_OP_DIVISION: {
-        this.#pushOperator(STR_DIVISION, this.#division);
+        this.#pushOperator(STR_DIVISION, ExpressionController.#division);
         break;
       }
       case BTN_CODE_OP_POWER: {
-        this.#pushOperator(STR_POWER, this.#power);
+        this.#pushOperator(STR_POWER, ExpressionController.#power);
         break;
       }
       case BTN_CODE_CMD_CLEAR: {
@@ -286,23 +289,23 @@ class ExpressionController {
     this.#rightOperand = tmp;
   }
 
-  #addition(x, y) {
+  static #addition(x, y) {
     return x + y;
   }
 
-  #subtraction(x, y) {
+  static #subtraction(x, y) {
     return x - y;
   }
 
-  #multiplication(x, y) {
+  static #multiplication(x, y) {
     return x * y;
   }
 
-  #division(x, y) {
+  static #division(x, y) {
     return x / y;
   }
 
-  #power(x, y) {
+  static #power(x, y) {
     return Math.pow(x, y);
   }
 }
