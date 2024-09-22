@@ -363,46 +363,53 @@ class ExpressionController {
 }
 
 // Calculator /////////////////////////////////////////////////////////////////
-class Calculator {
-  constructor() {
-    const btnInfos = [
-      ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
-      ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
-      ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
-      ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
-      ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
-      ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
-      ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
-      ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
-      ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
-      ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
-      ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
-      ["btn-num-sign", BTN_CODE_NUM_SIGN],
-      ["btn-op-addition", BTN_CODE_OP_ADDITION],
-      ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
-      ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
-      ["btn-op-division", BTN_CODE_OP_DIVISION],
-      ["btn-op-power", BTN_CODE_OP_POWER],
-      ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
-      ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
-      ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
-    ];
+const BTN_INFOS = [
+  ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
+  ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
+  ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
+  ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
+  ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
+  ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
+  ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
+  ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
+  ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
+  ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
+  ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
+  ["btn-num-sign", BTN_CODE_NUM_SIGN],
+  ["btn-op-addition", BTN_CODE_OP_ADDITION],
+  ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
+  ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
+  ["btn-op-division", BTN_CODE_OP_DIVISION],
+  ["btn-op-power", BTN_CODE_OP_POWER],
+  ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
+  ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
+  ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
+];
 
-    const exprCtrl = new ExpressionController();
-    for (const btnInfo of btnInfos) {
-      const [btnId, btnCode] = btnInfo;
+class Calculator {
+  #operator;
+  #leftOperand;
+  #rightOperand;
+  #expressionCtrl;
+
+  constructor() {
+    this.#operator = document.getElementById("disp-operator");
+    this.#leftOperand = document.getElementById("disp-left-operand");
+    this.#rightOperand = document.getElementById("disp-right-operand");
+    this.#expressionCtrl = new ExpressionController();
+
+    for (const [btnId, btnCode] of BTN_INFOS) {
       document.getElementById(btnId).addEventListener("click", () => {
-        exprCtrl.processButtonClick(btnCode);
-        document.getElementById("disp-operator").innerHTML =
-          exprCtrl.getOperatorString();
-        document.getElementById("disp-left-operand").textContent =
-          exprCtrl.getLeftOperandString();
-        document.getElementById("disp-right-operand").textContent =
-          exprCtrl.getRightOperandString();
+        this.#expressionCtrl.processButtonClick(btnCode);
+        this.#operator.innerHTML = exprCtrl.getOperatorString();
+        this.#leftOperand.textContent = exprCtrl.getLeftOperandString();
+        this.#rightOperand.textContent = exprCtrl.getRightOperandString();
       });
     }
   }
 }
+
+const calculator = new Calculator();
 
 // Main ///////////////////////////////////////////////////////////////////////
 // const main = () => {
@@ -448,5 +455,3 @@ class Calculator {
 // };
 
 // main();
-
-const calculator = new Calculator();
