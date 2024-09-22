@@ -120,6 +120,10 @@ class NumberController {
     return `${sign}${integerPart}${decimalPoint}${decimalPart}`;
   }
 
+  getNumber() {
+    return Number(this.getString());
+  }
+
   setNumber(number) {
     this.clear();
     if (number < 0) {
@@ -363,7 +367,13 @@ const test = () => {
   let nums = [999999.999, 0, 1, -1, 3.1415, -3.1415, 123, -123];
   nums.forEach((num) => {
     ctrl.setNumber(num);
-    console.log("-----", num, ctrl.getString(), ctrl.isEmpty());
+    console.log(
+      "-----",
+      num,
+      ctrl.getString(),
+      ctrl.isEmpty(),
+      ctrl.getNumber()
+    );
   });
 };
 
