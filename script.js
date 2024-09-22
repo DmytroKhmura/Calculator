@@ -310,10 +310,11 @@ class ExpressionController {
       }
       case BTN_CODE_CMD_CALCULATE: {
         if (this.#isLeftOperandSet) {
-          const x = Number(this.#leftOperand.getString());
-          const y = Number(this.#rightOperand.getString());
-          const result = this.#operation(x, y);
-          console.log(this.#operatorStr, x, y, result);
+          const left = this.#leftOperand.getNumber();
+          const right = this.#rightOperand.getNumber();
+          const result = this.#operation(left, right);
+          this.clear();
+          this.#rightOperand.setNumber(result);
         }
         break;
       }
@@ -361,64 +362,91 @@ class ExpressionController {
   }
 }
 
-// Test ///////////////////////////////////////////////////////////////////////
-const test = () => {
-  let ctrl = new NumberController();
-  let nums = [999999.999, 0, 1, -1, 3.1415, -3.1415, 123, -123];
-  nums.forEach((num) => {
-    ctrl.setNumber(num);
-    console.log(
-      "-----",
-      num,
-      ctrl.getString(),
-      ctrl.isEmpty(),
-      ctrl.getNumber()
-    );
-  });
-};
+// Calculator /////////////////////////////////////////////////////////////////
+class Calculator {
+  constructor() {
+    const btnInfos = [
+      ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
+      ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
+      ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
+      ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
+      ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
+      ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
+      ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
+      ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
+      ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
+      ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
+      ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
+      ["btn-num-sign", BTN_CODE_NUM_SIGN],
+      ["btn-op-addition", BTN_CODE_OP_ADDITION],
+      ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
+      ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
+      ["btn-op-division", BTN_CODE_OP_DIVISION],
+      ["btn-op-power", BTN_CODE_OP_POWER],
+      ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
+      ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
+      ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
+    ];
+
+    const exprCtrl = new ExpressionController();
+    for (const btnInfo of btnInfos) {
+      const [btnId, btnCode] = btnInfo;
+      document.getElementById(btnId).addEventListener("click", () => {
+        exprCtrl.processButtonClick(btnCode);
+        document.getElementById("disp-operator").innerHTML =
+          exprCtrl.getOperatorString();
+        document.getElementById("disp-left-operand").textContent =
+          exprCtrl.getLeftOperandString();
+        document.getElementById("disp-right-operand").textContent =
+          exprCtrl.getRightOperandString();
+      });
+    }
+  }
+}
 
 // Main ///////////////////////////////////////////////////////////////////////
-const dataArr = [
-  ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
-  ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
-  ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
-  ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
-  ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
-  ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
-  ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
-  ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
-  ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
-  ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
-  ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
-  ["btn-num-sign", BTN_CODE_NUM_SIGN],
-  ["btn-op-addition", BTN_CODE_OP_ADDITION],
-  ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
-  ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
-  ["btn-op-division", BTN_CODE_OP_DIVISION],
-  ["btn-op-power", BTN_CODE_OP_POWER],
-  ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
-  ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
-  ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
-];
+// const main = () => {
+//   const dataArr = [
+//     ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
+//     ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
+//     ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
+//     ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
+//     ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
+//     ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
+//     ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
+//     ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
+//     ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
+//     ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
+//     ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
+//     ["btn-num-sign", BTN_CODE_NUM_SIGN],
+//     ["btn-op-addition", BTN_CODE_OP_ADDITION],
+//     ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
+//     ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
+//     ["btn-op-division", BTN_CODE_OP_DIVISION],
+//     ["btn-op-power", BTN_CODE_OP_POWER],
+//     ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
+//     ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
+//     ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
+//   ];
 
-const main = () => {
-  test();
-  // const exprCtrl = new ExpressionController();
-  // for (const data of dataArr) {
-  //   const [id, btnCode] = data;
-  //   if (!document.getElementById(id)) {
-  //     console.log("False id");
-  //   }
-  //   document.getElementById(id).addEventListener("click", () => {
-  //     exprCtrl.processButtonClick(btnCode);
-  //     document.getElementById("disp-operator").innerHTML =
-  //       exprCtrl.getOperatorString();
-  //     document.getElementById("disp-left-operand").textContent =
-  //       exprCtrl.getLeftOperandString();
-  //     document.getElementById("disp-right-operand").textContent =
-  //       exprCtrl.getRightOperandString();
-  //   });
-  // }
-};
+//   const exprCtrl = new ExpressionController();
+//   for (const data of dataArr) {
+//     const [id, btnCode] = data;
+//     if (!document.getElementById(id)) {
+//       console.log("False id");
+//     }
+//     document.getElementById(id).addEventListener("click", () => {
+//       exprCtrl.processButtonClick(btnCode);
+//       document.getElementById("disp-operator").innerHTML =
+//         exprCtrl.getOperatorString();
+//       document.getElementById("disp-left-operand").textContent =
+//         exprCtrl.getLeftOperandString();
+//       document.getElementById("disp-right-operand").textContent =
+//         exprCtrl.getRightOperandString();
+//     });
+//   }
+// };
 
-main();
+// main();
+
+const calculator = new Calculator();
