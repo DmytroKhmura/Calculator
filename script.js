@@ -43,6 +43,21 @@ const BTN_CODE_CMD_CLEAR_ENTRY = 202;
 // NumberController ///////////////////////////////////////////////////////////
 const MAX_NUM_INTEGER_PART_SIZE = 6;
 const MAX_NUM_DECIMAL_PART_SIZE = 3;
+const NUM_RADIX = 10;
+const NUM_DECIMAL_PART_FACTOR = Math.pow(NUM_RADIX, MAX_NUM_DECIMAL_PART_SIZE);
+
+const STR_DIGIT_MAP = [
+  STR_DIGIT_0,
+  STR_DIGIT_1,
+  STR_DIGIT_2,
+  STR_DIGIT_3,
+  STR_DIGIT_4,
+  STR_DIGIT_5,
+  STR_DIGIT_6,
+  STR_DIGIT_7,
+  STR_DIGIT_8,
+  STR_DIGIT_9,
+];
 
 class NumberController {
   #isMinusSignSet;
@@ -82,6 +97,13 @@ class NumberController {
     if (this.#decimalPart.length === 0) {
       this.#isDecimalPointSet = false;
     }
+    if (
+      this.#decimalPart.length === 0 &&
+      this.#integerPart.length === 1 &&
+      this.#integerPart[0] === STR_DIGIT_0
+    ) {
+      this.#integerPart.pop();
+    }
     if (this.#integerPart.length === 0 && this.#decimalPart.length === 0) {
       this.#isMinusSignSet = false;
     }
@@ -96,6 +118,31 @@ class NumberController {
     }
     const decimalPart = this.#decimalPart.join("");
     return `${sign}${integerPart}${decimalPoint}${decimalPart}`;
+  }
+
+  setNumber(number) {
+    this.clear();
+    if (number < 0) {
+      this.#isMinusSignSet = true;
+      number = -number;
+    }
+    this.#isDecimalPointSet = true;
+    let remain = number % 1;
+    this.#convertInteger(Math.floor(number), this.#integerPart);
+    this.#convertInteger(
+      Math.round(remain * NUM_DECIMAL_PART_FACTOR),
+      this.#decimalPart
+    );
+    this.normalize();
+  }
+
+  #convertInteger(number, part) {
+    while (number > 0) {
+      let remain = number % NUM_RADIX;
+      number = (number - remain) / NUM_RADIX;
+      part.push(STR_DIGIT_MAP[remain]);
+    }
+    part.reverse();
   }
 
   processButtonClick(btnCode) {
@@ -310,6 +357,16 @@ class ExpressionController {
   }
 }
 
+// Test ///////////////////////////////////////////////////////////////////////
+const test = () => {
+  let ctrl = new NumberController();
+  let nums = [999999.999, 0, 1, -1, 3.1415, -3.1415, 123, -123];
+  nums.forEach((num) => {
+    ctrl.setNumber(num);
+    console.log("-----", num, ctrl.getString(), ctrl.isEmpty());
+  });
+};
+
 // Main ///////////////////////////////////////////////////////////////////////
 const dataArr = [
   ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
@@ -335,22 +392,23 @@ const dataArr = [
 ];
 
 const main = () => {
-  const exprCtrl = new ExpressionController();
-  for (const data of dataArr) {
-    const [id, btnCode] = data;
-    if (!document.getElementById(id)) {
-      console.log("False id");
-    }
-    document.getElementById(id).addEventListener("click", () => {
-      exprCtrl.processButtonClick(btnCode);
-      document.getElementById("disp-operator").innerHTML =
-        exprCtrl.getOperatorString();
-      document.getElementById("disp-left-operand").textContent =
-        exprCtrl.getLeftOperandString();
-      document.getElementById("disp-right-operand").textContent =
-        exprCtrl.getRightOperandString();
-    });
-  }
+  test();
+  // const exprCtrl = new ExpressionController();
+  // for (const data of dataArr) {
+  //   const [id, btnCode] = data;
+  //   if (!document.getElementById(id)) {
+  //     console.log("False id");
+  //   }
+  //   document.getElementById(id).addEventListener("click", () => {
+  //     exprCtrl.processButtonClick(btnCode);
+  //     document.getElementById("disp-operator").innerHTML =
+  //       exprCtrl.getOperatorString();
+  //     document.getElementById("disp-left-operand").textContent =
+  //       exprCtrl.getLeftOperandString();
+  //     document.getElementById("disp-right-operand").textContent =
+  //       exprCtrl.getRightOperandString();
+  //   });
+  // }
 };
 
 main();
