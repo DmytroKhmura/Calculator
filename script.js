@@ -401,9 +401,11 @@ class Calculator {
     for (const [btnId, btnCode] of BTN_INFOS) {
       document.getElementById(btnId).addEventListener("click", () => {
         this.#expressionCtrl.processButtonClick(btnCode);
-        this.#operator.innerHTML = exprCtrl.getOperatorString();
-        this.#leftOperand.textContent = exprCtrl.getLeftOperandString();
-        this.#rightOperand.textContent = exprCtrl.getRightOperandString();
+        this.#operator.innerHTML = this.#expressionCtrl.getOperatorString();
+        this.#leftOperand.textContent =
+          this.#expressionCtrl.getLeftOperandString();
+        this.#rightOperand.textContent =
+          this.#expressionCtrl.getRightOperandString();
       });
     }
   }
