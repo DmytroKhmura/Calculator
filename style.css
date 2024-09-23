@@ -1,7 +1,7 @@
 :root {
   --screen-bg-color: rgb(31, 34, 55);
 
-  --message-text-color: white;
+  --message-text-color: silver;
 
   --calc-width: 335px;
   --calc-height: 505px;
@@ -71,7 +71,7 @@ body {
   grid-area: 1 / 1 / span 1 / span 4;
   color: var(--display-text-color);
   background-color: var(--display-bg-color);
-
+  padding: 0 5px;
   display: grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(8, 1fr);
@@ -88,7 +88,7 @@ body {
 
 #disp-operator {
   grid-area: 1 / 1 / span 2 / span 1;
-  justify-content: center;
+  justify-content: left;
 }
 
 #disp-left-operand {
