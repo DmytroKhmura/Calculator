@@ -248,15 +248,17 @@ class NumberController {
       if (this.#integerPart.length < MAX_NUM_INTEGER_PART_SIZE) {
         this.#integerPart.push(digitStr);
       } else {
-        // show message informing about maximum integer part size
-        // "The integer part of the number must not be longer than MAX_NUM_INTEGER_PART_SIZE digits"
+        message.show(
+          `The integer part of the number must not be longer than ${MAX_NUM_INTEGER_PART_SIZE} digits.`
+        );
       }
     } else {
       if (this.#decimalPart.length < MAX_NUM_DECIMAL_PART_SIZE) {
         this.#decimalPart.push(digitStr);
       } else {
-        // show message informing about maximum decimal part size
-        // "The decimal part of the number must not be longer than MAX_NUM_DECIMAL_PART_SIZE digits"
+        message.show(
+          `The decimal part of the number must not be longer than ${MAX_NUM_DECIMAL_PART_SIZE} digits.`
+        );
       }
     }
   }
