@@ -69,6 +69,8 @@ const MAX_NUM_INTEGER_PART_SIZE = 6;
 const MAX_NUM_DECIMAL_PART_SIZE = 3;
 const NUM_RADIX = 10;
 const NUM_DECIMAL_PART_FACTOR = Math.pow(NUM_RADIX, MAX_NUM_DECIMAL_PART_SIZE);
+const MAX_NUM_VALUE =
+  Math.pow(NUM_RADIX, MAX_NUM_INTEGER_PART_SIZE) - 1 / NUM_DECIMAL_PART_FACTOR;
 
 const STR_DIGIT_MAP = [
   STR_DIGIT_0,
@@ -345,9 +347,18 @@ class ExpressionController {
           const left = this.#leftOperand.getNumber();
           const right = this.#rightOperand.getNumber();
           const result = this.#operation(left, right);
-          // check result and in case of error show corresponding message
-          this.clear();
-          this.#rightOperand.setNumber(result);
+          if (Number.isNaN(result)) {
+            message.show("Invalid operand value.");
+          } else if (!Number.isFinite(result)) {
+            message.show(`Infinity cannot be represented by the calculator.`);
+          } else if (Math.abs(result) > MAX_NUM_VALUE) {
+            message.show(
+              `The value ${result} cannot be represented by the calculator.`
+            );
+          } else {
+            this.clear();
+            this.#rightOperand.setNumber(result);
+          }
         }
         break;
       }
