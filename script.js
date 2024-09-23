@@ -40,6 +40,30 @@ const BTN_CODE_CMD_CALCULATE = 200;
 const BTN_CODE_CMD_CLEAR = 201;
 const BTN_CODE_CMD_CLEAR_ENTRY = 202;
 
+// Message ////////////////////////////////////////////////////////////////////
+class Message {
+  #output;
+  #timeoutId;
+
+  constructor() {
+    this.#output = document.getElementById("message");
+    this.#timeoutId = null;
+  }
+
+  show(text, duration = 5000) {
+    this.#output.textContent = text;
+    if (this.#timeoutId) {
+      clearTimeout(this.#timeoutId);
+    }
+    this.#timeoutId = setTimeout(() => {
+      this.#output.textContent = "";
+      this.#timeoutId = null;
+    }, duration);
+  }
+}
+
+const message = new Message();
+
 // NumberController ///////////////////////////////////////////////////////////
 const MAX_NUM_INTEGER_PART_SIZE = 6;
 const MAX_NUM_DECIMAL_PART_SIZE = 3;
@@ -223,10 +247,16 @@ class NumberController {
       }
       if (this.#integerPart.length < MAX_NUM_INTEGER_PART_SIZE) {
         this.#integerPart.push(digitStr);
+      } else {
+        // show message informing about maximum integer part size
+        // "The integer part of the number must not be longer than MAX_NUM_INTEGER_PART_SIZE digits"
       }
     } else {
       if (this.#decimalPart.length < MAX_NUM_DECIMAL_PART_SIZE) {
         this.#decimalPart.push(digitStr);
+      } else {
+        // show message informing about maximum decimal part size
+        // "The decimal part of the number must not be longer than MAX_NUM_DECIMAL_PART_SIZE digits"
       }
     }
   }
@@ -313,6 +343,7 @@ class ExpressionController {
           const left = this.#leftOperand.getNumber();
           const right = this.#rightOperand.getNumber();
           const result = this.#operation(left, right);
+          // check result and in case of error show corresponding message
           this.clear();
           this.#rightOperand.setNumber(result);
         }
@@ -412,48 +443,3 @@ class Calculator {
 }
 
 const calculator = new Calculator();
-
-// Main ///////////////////////////////////////////////////////////////////////
-// const main = () => {
-//   const dataArr = [
-//     ["btn-num-digit-0", BTN_CODE_NUM_DIGIT_0],
-//     ["btn-num-digit-1", BTN_CODE_NUM_DIGIT_1],
-//     ["btn-num-digit-2", BTN_CODE_NUM_DIGIT_2],
-//     ["btn-num-digit-3", BTN_CODE_NUM_DIGIT_3],
-//     ["btn-num-digit-4", BTN_CODE_NUM_DIGIT_4],
-//     ["btn-num-digit-5", BTN_CODE_NUM_DIGIT_5],
-//     ["btn-num-digit-6", BTN_CODE_NUM_DIGIT_6],
-//     ["btn-num-digit-7", BTN_CODE_NUM_DIGIT_7],
-//     ["btn-num-digit-8", BTN_CODE_NUM_DIGIT_8],
-//     ["btn-num-digit-9", BTN_CODE_NUM_DIGIT_9],
-//     ["btn-num-decimal-point", BTN_CODE_NUM_DECIMAL_POINT],
-//     ["btn-num-sign", BTN_CODE_NUM_SIGN],
-//     ["btn-op-addition", BTN_CODE_OP_ADDITION],
-//     ["btn-op-subtraction", BTN_CODE_OP_SUBTRACTION],
-//     ["btn-op-multiplication", BTN_CODE_OP_MULTIPLICATION],
-//     ["btn-op-division", BTN_CODE_OP_DIVISION],
-//     ["btn-op-power", BTN_CODE_OP_POWER],
-//     ["btn-cmd-calculate", BTN_CODE_CMD_CALCULATE],
-//     ["btn-cmd-clear", BTN_CODE_CMD_CLEAR],
-//     ["btn-cmd-clear-entry", BTN_CODE_CMD_CLEAR_ENTRY],
-//   ];
-
-//   const exprCtrl = new ExpressionController();
-//   for (const data of dataArr) {
-//     const [id, btnCode] = data;
-//     if (!document.getElementById(id)) {
-//       console.log("False id");
-//     }
-//     document.getElementById(id).addEventListener("click", () => {
-//       exprCtrl.processButtonClick(btnCode);
-//       document.getElementById("disp-operator").innerHTML =
-//         exprCtrl.getOperatorString();
-//       document.getElementById("disp-left-operand").textContent =
-//         exprCtrl.getLeftOperandString();
-//       document.getElementById("disp-right-operand").textContent =
-//         exprCtrl.getRightOperandString();
-//     });
-//   }
-// };
-
-// main();
